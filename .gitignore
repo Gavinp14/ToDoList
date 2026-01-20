@@ -1,0 +1,14 @@
+# dependencies
+frontend/node_modules/
+
+# environment variables
+frontend/.env.local
+frontend/.env*.local
+
+# next.js
+frontend/.next/
+frontend/out/
+
+# misc
+.DS_Store
+*.log
