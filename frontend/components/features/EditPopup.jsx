@@ -4,11 +4,11 @@ import Input from '../ui/Input';
 import Button from '../ui/Button';
 
 export default function EditPopup({ isOpen, onClose, todo, onSave }) {
-  const [tempTitle, setTempTitle] = useState('');
+  const [tempTitle, setTempTitle] = useState(todo ? todo.title : '');
 
   // Update the input field whenever the 'todo' prop changes (when opening)
   useEffect(() => {
-    if (todo) setTempTitle(tempTitle);
+    if (todo) setTempTitle(todo.title);
   }, [todo]);
 
   const handleSave = () => {

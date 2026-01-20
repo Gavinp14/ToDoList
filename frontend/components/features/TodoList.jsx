@@ -7,21 +7,16 @@ import EditPopup from './EditPopup';
 
 export default function TodoList() {
     //dummy data
-  const [todos, setTodos] = useState([
-    { id: 1, title: 'Sample Task 1', isChecked: false },
-    { id: 2, title: 'Sample Task 2', isChecked: true },
-  ]);
-
+  const [todos, setTodos] = useState([]);
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const [editingTodoId, setEditingTodoId] = useState(null);
 
   const addTodo = () => {
-    const newTodo = { id: Date.now(), title: newTodoTitle, isChecked: false };
-
-    // Prevent adding empty todos
     if (newTodoTitle.trim() === '') return;
+    const newTodo = { id: Date.now(), title: newTodoTitle, isChecked: false };
     setTodos([...todos, newTodo]);
+    setNewTodoTitle('');
   };
 
   const toggleTodo = (id) => {
@@ -46,22 +41,27 @@ export default function TodoList() {
   return (
     <div>
       <div className="flex gap-4 justify-center add-task-button mb-6">
-        <Input placeholder="Enter your task here..." className="input-todo-item" onChange={changeInput}/>
+        <Input placeholder="Enter your task here..." className="input-todo-item" onChange={changeInput} value={newTodoTitle}/>
         <Button color="blue" onClick={addTodo}>+</Button>
       </div>
       <div className="space-y-4">
-        {todos.map(todo => (
-          <TodoItem
-            key={todo.id}
-            id={todo.id}
-            title={todo.title}
+        {todos.length === 0 ? (
+          <p className="text-center text-gray-500">No tasks available. Add a new task!</p>
+        ) : (
+          todos.map(todo => (
+            <TodoItem
+              key={todo.id}
+              id={todo.id}
+              title={todo.title}
             isChecked={todo.isChecked}
             onToggle={() => toggleTodo(todo.id)}
             onEdit={() => editTodo(todo.id)}
             onDelete={() => deleteTodo(todo.id)}
           />
-        ))}
+        ))
+        )}
       </div>
+
       <EditPopup 
         isOpen={isPopUpOpen} 
         todo={todos.find(todo => todo.id === editingTodoId)}
@@ -69,7 +69,10 @@ export default function TodoList() {
           setTodos(todos.map(todo => todo.id === id ? {...todo, title: newTitle} : todo));
           setIsPopUpOpen(false);
         }}
-        onClose={() => setIsPopUpOpen(false)} 
+        onClose={() => {
+            setIsPopUpOpen(false);
+            setEditingTodoId(null);
+        }}
       ></EditPopup>
     </div>
   );
