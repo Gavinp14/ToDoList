@@ -1,5 +1,9 @@
+
+
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+import Card from '@/components/ui/Card';
+import TodoList from '@/components/features/TodoList';
 
 
 const date = new Date().toLocaleDateString();
@@ -15,10 +19,8 @@ export default function Home() {
           <p className="text-xl text-gray-600 mb-8">
             Enter A task To Get Started
           </p>
-          
-          <div className="flex gap-4 justify-center add-task-button">
-            <Input placeholder="Enter your task here..." className="input-todo-item" />
-            <Button color="blue">+</Button>
+          <div className="mt-12 space-y-4">
+            <TodoList />
           </div>
         </div>
       </div>

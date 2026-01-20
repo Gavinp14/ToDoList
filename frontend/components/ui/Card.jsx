@@ -1,11 +1,8 @@
-export default function Card({ title }) {
+// src/components/ui/Card.js
+export default function Card({ children }) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      {title && (
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">
-          {title}
-        </h3>
-      )}
+    <div className="bg-gray-100 rounded-lg shadow-md p-6">
+      {children}
     </div>
   );
 }
