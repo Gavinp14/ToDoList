@@ -1,7 +1,7 @@
 import React, { useState, useEffect, use } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import Popup from "../../ui/PopUp";
-import Button from "../../ui/Button";
+import Popup from "../ui/PopUp";
+import Button from "../ui/Button";
 
 function SignoutModal({ isOpen, onClose }) {
   const { signOutUser } = useAuth();

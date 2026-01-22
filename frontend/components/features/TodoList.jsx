@@ -14,7 +14,7 @@ import { fetchUserTodos } from "@/db/users";
 import TodoItem from "./TodoItem";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
-import EditPopup from "./modals/EditPopup";
+import EditPopup from "../modals/EditPopup";
 
 export default function TodoList() {
   const { user } = useAuth();

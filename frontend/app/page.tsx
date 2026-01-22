@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import TodoList from "@/components/features/TodoList";
-import SignoutModal from "@/components/features/modals/SignoutModal";
+import SignoutModal from "@/components/modals/SignoutModal";
 
 export default function HomePage() {
   const { user, loading, signOutUser } = useAuth();
