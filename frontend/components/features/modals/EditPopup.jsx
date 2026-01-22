@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import PopUp from '../ui/PopUp';
-import Input from '../ui/Input';
-import Button from '../ui/Button';
+import PopUp from '../../ui/PopUp';
+import Input from '../../ui/Input';
+import Button from '../../ui/Button';
 
 export default function EditPopup({ isOpen, onClose, todo, onSave }) {
   const [tempTitle, setTempTitle] = useState(todo ? todo.title : '');
