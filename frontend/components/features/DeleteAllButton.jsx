@@ -33,7 +33,7 @@ function DeleteAllButton({ todos, userId }) {
   };
 
   return (
-    <Button color="red" onClick={handleDeleteAll}>
+    <Button color="red" size="sm" onClick={handleDeleteAll}>
       Delete All Tasks
     </Button>
   );
