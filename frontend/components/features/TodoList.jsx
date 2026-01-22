@@ -2,32 +2,15 @@
 
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import {
-  addTodo,
-  toggleTodoStatus,
-  removeTodo,
-  updateTodoTitle,
-} from "@/db/todo";
+import { toggleTodoStatus, removeTodo, updateTodoTitle } from "@/db/todo";
 import TodoItem from "./TodoItem";
-import Input from "../ui/Input";
-import Button from "../ui/Button";
+import TodoInput from "./TodoInput"; // 1. Import new component
 import EditPopup from "../modals/EditPopup";
 
 export default function TodoList({ todos = [] }) {
   const { user } = useAuth();
-  const [newTodoTitle, setNewTodoTitle] = useState("");
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const [editingTodoId, setEditingTodoId] = useState(null);
-
-  const handleAdd = async (e) => {
-    // 1. Prevent page refresh (important for forms)
-    if (e) e.preventDefault();
-
-    if (!user || !newTodoTitle.trim()) return;
-
-    await addTodo(user.uid, newTodoTitle);
-    setNewTodoTitle("");
-  };
 
   const handleToggle = async (id, status) => {
     await toggleTodoStatus(id, status);
@@ -39,18 +22,6 @@ export default function TodoList({ todos = [] }) {
 
   return (
     <div>
-      <form onSubmit={handleAdd} className="flex gap-4 justify-center mb-6">
-        <Input
-          placeholder="Enter your task here..."
-          onChange={(e) => setNewTodoTitle(e.target.value)}
-          value={newTodoTitle}
-        />
-        <Button type="submit" color="blue">
-          +
-        </Button>
-      </form>
-
-      {/* Scrollable Container */}
       <div className="max-h-[500px] overflow-x-hidden overflow-y-auto pr-2 custom-scrollbar">
         <div className="space-y-4">
           {todos.length === 0 ? (

@@ -10,6 +10,8 @@ import ProgressBar from "@/components/features/ProgressBar";
 import { subscribeToTodos } from "@/db/todo";
 import { useTodoCelebration } from "@/hooks/useCelebration";
 import Button from "@/components/ui/Button";
+import TodoInput from "@/components/features/TodoInput";
+import DeleteAllButton from "@/components/features/DeleteAllButton";
 import { User2 } from "lucide-react";
 
 export default function HomePage() {
@@ -90,8 +92,15 @@ export default function HomePage() {
         </div>
 
         {/* MAIN CONTENT */}
-        <div className="space-y-6">
+
+        <div className="bg-white p-6 rounded-lg shadow-md space-y-6">
           <ProgressBar todos={todos} />
+          <TodoInput userId={user?.uid} />
+
+          {/* FIXED: This wrapper ensures the button stays on the far right */}
+          <div className="flex justify-end">
+            <DeleteAllButton todos={todos} userId={user?.uid} />
+          </div>
           <TodoList todos={todos} />
         </div>
 
