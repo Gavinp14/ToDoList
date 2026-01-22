@@ -19,8 +19,12 @@ export default function TodoList({ todos = [] }) {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const [editingTodoId, setEditingTodoId] = useState(null);
 
-  const handleAdd = async () => {
-    if (!user) return;
+  const handleAdd = async (e) => {
+    // 1. Prevent page refresh (important for forms)
+    if (e) e.preventDefault();
+
+    if (!user || !newTodoTitle.trim()) return;
+
     await addTodo(user.uid, newTodoTitle);
     setNewTodoTitle("");
   };
@@ -35,17 +39,18 @@ export default function TodoList({ todos = [] }) {
 
   return (
     <div>
-      <div className="flex gap-4 justify-center mb-6">
+      {/* 2. Wrapped in a form with onSubmit */}
+      <form onSubmit={handleAdd} className="flex gap-4 justify-center mb-6">
         <Input
           placeholder="Enter your task here..."
           onChange={(e) => setNewTodoTitle(e.target.value)}
           value={newTodoTitle}
         />
-        <Button color="blue" onClick={handleAdd}>
-          {" "}
-          +{" "}
+        {/* 3. Changed button type to "submit" */}
+        <Button type="submit" color="blue">
+          +
         </Button>
-      </div>
+      </form>
 
       <div className="space-y-4">
         {todos.length === 0 ? (
