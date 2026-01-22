@@ -12,7 +12,7 @@ export default function ProgressBar({ todos = [] }) {
     switch (true) {
       case percent < 30:
         return "bg-red-600";
-      case percent >= 30 && percent < 50:
+      case percent >= 30 && percent < 51:
         return "bg-yellow-500";
       case percent >= 51 && percent < 99:
         return "bg-lime-500";

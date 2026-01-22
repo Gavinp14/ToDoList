@@ -18,6 +18,7 @@ export const fireSuccessConfetti = () => {
     const particleCount = 50 * (timeLeft / duration);
 
     // Fire from two random spots
+    // Colors of user choice will ensure they fit the app theme when user settings feature is made
     confetti({
       ...defaults,
       particleCount,

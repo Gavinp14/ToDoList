@@ -1,49 +1,54 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import TodoList from "@/components/features/TodoList";
 import SignoutModal from "@/components/modals/SignoutModal";
+import UserModal from "@/components/modals/UserModal";
 import ProgressBar from "@/components/features/ProgressBar";
-// Ensure this import matches your new file name (todo.ts)
 import { subscribeToTodos } from "@/db/todo";
 import { useTodoCelebration } from "@/hooks/useCelebration";
+import Button from "@/components/ui/Button";
+import { User2 } from "lucide-react";
 
 export default function HomePage() {
   const { user, loading } = useAuth();
-  const [isPopUpOpen, setIsPopUpOpen] = useState(false);
-  const [todos, setTodos] = useState<any[]>([]);
   const router = useRouter();
 
-  // Redirect logic
+  // 1. Separate states for each modal to fix the double-popup bug
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [isSignoutModalOpen, setIsSignoutModalOpen] = useState(false);
+
+  const [todos, setTodos] = useState<any[]>([]);
+
+  // Redirect logic: If not loading and no user, send to auth page
   useEffect(() => {
     if (!loading && !user) {
       router.push("/auth");
     }
   }, [user, loading, router]);
 
-  // LIVE DATA FETCH (Real-time)
+  // LIVE DATA FETCH (Real-time listener)
   useEffect(() => {
-    // Variable to hold the "stop" function
     let unsubscribe: () => void;
 
     if (user?.uid) {
-      // Start the listener. It sends the array of todos to 'setTodos'
-      // every time the database changes.
       unsubscribe = subscribeToTodos(user.uid, (data) => {
         setTodos(data || []);
       });
     }
 
-    // Cleanup: This runs when the user logs out or leaves the page
+    // Cleanup: Stops listening when component unmounts or user logs out
     return () => {
       if (unsubscribe) unsubscribe();
     };
   }, [user]);
 
-  //confetti listener
+  // Confetti listener: Fires when all tasks in the 'todos' state are checked
   useTodoCelebration(todos);
 
+  // Loading Screen
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
@@ -54,28 +59,52 @@ export default function HomePage() {
     );
   }
 
+  // Prevent flicker before redirect
   if (!user) return null;
 
   return (
     <main className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto">
+        {/* HEADER SECTION */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">My To-Do List</h1>
-          <h2
-            className="text-red-600 hover:text-red-700 cursor-pointer font-medium focus:outline-none"
-            onClick={() => setIsPopUpOpen(true)}
-          >
-            Log Out
-          </h2>
+
+          {/* Right-aligned group */}
+          <div className="ml-auto flex items-center gap-6">
+            <Button
+              aria-label="User Settings"
+              className="p-2 rounded-full hover:bg-gray- transition"
+              color="gray"
+              onClick={() => setIsUserModalOpen(true)}
+            >
+              <User2 className="h-5 w-5" />
+            </Button>
+
+            <h2
+              className="text-red-600 hover:text-red-700 cursor-pointer font-medium focus:outline-none transition-colors"
+              onClick={() => setIsSignoutModalOpen(true)}
+            >
+              Log Out
+            </h2>
+          </div>
         </div>
 
-        {/* Both of these now react instantly to database changes */}
-        <ProgressBar todos={todos} />
-        <TodoList todos={todos} />
+        {/* MAIN CONTENT */}
+        <div className="space-y-6">
+          <ProgressBar todos={todos} />
+          <TodoList todos={todos} />
+        </div>
 
+        {/* MODALS SECTION */}
         <SignoutModal
-          isOpen={isPopUpOpen}
-          onClose={() => setIsPopUpOpen(false)}
+          isOpen={isSignoutModalOpen}
+          onClose={() => setIsSignoutModalOpen(false)}
+        />
+
+        <UserModal
+          isOpen={isUserModalOpen}
+          onClose={() => setIsUserModalOpen(false)}
+          currentUser={user}
         />
       </div>
     </main>
