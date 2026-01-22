@@ -3,23 +3,26 @@ import React, { useState, useEffect } from "react";
 // components/features/ProgressBar.jsx
 
 export default function ProgressBar({ todos = [] }) {
-  // 1. Calculate progress based on the props sent from HomePage
   const totalCount = todos.length;
-  // Make sure your todo objects have a '.completed' property
   const completedCount = todos.filter((todo) => todo.isChecked).length;
-
   const percentage = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
 
+  //write a unit test for this
   const changeColorBasedOnProgress = (percent) => {
     switch (true) {
       case percent < 30:
         return "bg-red-600";
-      case percent >= 30 && percent < 70:
+      case percent >= 30 && percent < 50:
         return "bg-yellow-500";
-      case percent >= 70 && percent < 99:
+      case percent >= 51 && percent < 99:
         return "bg-lime-500";
     }
     return "bg-green-600";
+  };
+
+  //write unit test for this
+  const changeCompleteTextColor = (percent) => {
+    return percent === 100 ? "text-green-600" : "text-blue-600";
   };
 
   return (
@@ -29,7 +32,9 @@ export default function ProgressBar({ todos = [] }) {
         <span className="text-sm font-bold text-gray-700">
           {completedCount} of {totalCount} Tasks Completed
         </span>
-        <span className="text-sm font-medium text-blue-600">
+        <span
+          className={`text-sm font-medium ${changeCompleteTextColor(percentage)}`}
+        >
           {Math.round(percentage)}% Complete
         </span>
       </div>

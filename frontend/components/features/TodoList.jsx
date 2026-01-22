@@ -39,37 +39,38 @@ export default function TodoList({ todos = [] }) {
 
   return (
     <div>
-      {/* 2. Wrapped in a form with onSubmit */}
       <form onSubmit={handleAdd} className="flex gap-4 justify-center mb-6">
         <Input
           placeholder="Enter your task here..."
           onChange={(e) => setNewTodoTitle(e.target.value)}
           value={newTodoTitle}
         />
-        {/* 3. Changed button type to "submit" */}
         <Button type="submit" color="blue">
           +
         </Button>
       </form>
 
-      <div className="space-y-4">
-        {todos.length === 0 ? (
-          <p className="text-center text-gray-500">No tasks available.</p>
-        ) : (
-          todos.map((todo) => (
-            <TodoItem
-              key={todo.id}
-              title={todo.title}
-              isChecked={todo.isChecked}
-              onToggle={() => handleToggle(todo.id, todo.isChecked)}
-              onEdit={() => {
-                setEditingTodoId(todo.id);
-                setIsPopUpOpen(true);
-              }}
-              onDelete={() => handleDelete(todo.id)}
-            />
-          ))
-        )}
+      {/* Scrollable Container */}
+      <div className="max-h-[500px] overflow-x-hidden overflow-y-auto pr-2 custom-scrollbar">
+        <div className="space-y-4">
+          {todos.length === 0 ? (
+            <p className="text-center text-gray-500">No tasks available.</p>
+          ) : (
+            todos.map((todo) => (
+              <TodoItem
+                key={todo.id}
+                title={todo.title}
+                isChecked={todo.isChecked}
+                onToggle={() => handleToggle(todo.id, todo.isChecked)}
+                onEdit={() => {
+                  setEditingTodoId(todo.id);
+                  setIsPopUpOpen(true);
+                }}
+                onDelete={() => handleDelete(todo.id)}
+              />
+            ))
+          )}
+        </div>
       </div>
 
       <EditPopup
