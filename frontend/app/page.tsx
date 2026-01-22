@@ -1,21 +1,44 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import TodoList from "@/components/features/TodoList";
 import SignoutModal from "@/components/modals/SignoutModal";
+import ProgressBar from "@/components/features/ProgressBar";
+// Ensure this import matches your new file name (todo.ts)
+import { subscribeToTodos } from "@/db/todo";
 
 export default function HomePage() {
-  const { user, loading, signOutUser } = useAuth();
+  const { user, loading } = useAuth();
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+  const [todos, setTodos] = useState<any[]>([]);
   const router = useRouter();
 
+  // Redirect logic
   useEffect(() => {
     if (!loading && !user) {
       router.push("/auth");
     }
   }, [user, loading, router]);
+
+  // LIVE DATA FETCH (Real-time)
+  useEffect(() => {
+    // Variable to hold the "stop" function
+    let unsubscribe: () => void;
+
+    if (user?.uid) {
+      // Start the listener. It sends the array of todos to 'setTodos'
+      // every time the database changes.
+      unsubscribe = subscribeToTodos(user.uid, (data) => {
+        setTodos(data || []);
+      });
+    }
+
+    // Cleanup: This runs when the user logs out or leaves the page
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [user]);
 
   if (loading) {
     return (
@@ -42,7 +65,10 @@ export default function HomePage() {
           </h2>
         </div>
 
-        <TodoList />
+        {/* Both of these now react instantly to database changes */}
+        <ProgressBar todos={todos} />
+        <TodoList todos={todos} />
+
         <SignoutModal
           isOpen={isPopUpOpen}
           onClose={() => setIsPopUpOpen(false)}

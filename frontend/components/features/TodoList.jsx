@@ -1,60 +1,36 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { db } from "@/lib/firebase";
+import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import {
-  doc,
-  deleteDoc,
-  updateDoc,
-  addDoc,
-  collection,
-} from "firebase/firestore";
-import { fetchUserTodos } from "@/db/users";
+  addTodo,
+  toggleTodoStatus,
+  removeTodo,
+  updateTodoTitle,
+} from "@/db/todo";
 import TodoItem from "./TodoItem";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import EditPopup from "../modals/EditPopup";
 
-export default function TodoList() {
+export default function TodoList({ todos = [] }) {
   const { user } = useAuth();
-  const [todos, setTodos] = useState([]);
   const [newTodoTitle, setNewTodoTitle] = useState("");
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const [editingTodoId, setEditingTodoId] = useState(null);
 
-  useEffect(() => {
-    if (user) {
-      loadTodos();
-    }
-  }, [user]);
-
-  const loadTodos = async () => {
-    const data = await fetchUserTodos(user.uid);
-    setTodos(data);
-  };
-
-  //add to todo
-  const addTodo = async () => {
-    if (!newTodoTitle.trim() || !user) return;
-    await addDoc(collection(db, "todos"), {
-      title: newTodoTitle,
-      isChecked: false,
-      userId: user.uid,
-      createdAt: new Date(),
-    });
+  const handleAdd = async () => {
+    if (!user) return;
+    await addTodo(user.uid, newTodoTitle);
     setNewTodoTitle("");
-    loadTodos(); // Refresh list after adding
   };
 
-  const toggleTodo = async (id, currentStatus) => {
-    await updateDoc(doc(db, "todos", id), { isChecked: !currentStatus });
-    loadTodos();
+  const handleToggle = async (id, status) => {
+    await toggleTodoStatus(id, status);
   };
 
-  const deleteTodo = async (id) => {
-    await deleteDoc(doc(db, "todos", id));
-    loadTodos();
+  const handleDelete = async (id) => {
+    await removeTodo(id);
   };
 
   return (
@@ -65,8 +41,9 @@ export default function TodoList() {
           onChange={(e) => setNewTodoTitle(e.target.value)}
           value={newTodoTitle}
         />
-        <Button color="blue" onClick={addTodo}>
-          +
+        <Button color="blue" onClick={handleAdd}>
+          {" "}
+          +{" "}
         </Button>
       </div>
 
@@ -79,12 +56,12 @@ export default function TodoList() {
               key={todo.id}
               title={todo.title}
               isChecked={todo.isChecked}
-              onToggle={() => toggleTodo(todo.id, todo.isChecked)}
+              onToggle={() => handleToggle(todo.id, todo.isChecked)}
               onEdit={() => {
                 setEditingTodoId(todo.id);
                 setIsPopUpOpen(true);
               }}
-              onDelete={() => deleteTodo(todo.id)}
+              onDelete={() => handleDelete(todo.id)}
             />
           ))
         )}
@@ -94,9 +71,8 @@ export default function TodoList() {
         isOpen={isPopUpOpen}
         todo={todos.find((t) => t.id === editingTodoId)}
         onSave={async (id, newTitle) => {
-          await updateDoc(doc(db, "todos", id), { title: newTitle });
+          await updateTodoTitle(id, newTitle);
           setIsPopUpOpen(false);
-          loadTodos();
         }}
         onClose={() => setIsPopUpOpen(false)}
       />
