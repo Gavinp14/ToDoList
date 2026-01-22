@@ -68,6 +68,8 @@ export const addTodo = async (userId: string, title: string) => {
   return await addDoc(collection(db, "todos"), {
     title,
     isChecked: false,
+    category: "General",
+    priority: "Medium",
     userId,
     createdAt: new Date(),
   });

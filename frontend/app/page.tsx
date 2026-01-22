@@ -12,7 +12,9 @@ import { useTodoCelebration } from "@/hooks/useCelebration";
 import Button from "@/components/ui/Button";
 import TodoInput from "@/components/features/TodoInput";
 import DeleteAllButton from "@/components/features/DeleteAllButton";
+import SortDropdown from "@/components/features/SortDropdown";
 import { User2 } from "lucide-react";
+import { sortTodos } from "@/utils/sort";
 
 export default function HomePage() {
   const { user, loading } = useAuth();
@@ -23,6 +25,8 @@ export default function HomePage() {
   const [isSignoutModalOpen, setIsSignoutModalOpen] = useState(false);
 
   const [todos, setTodos] = useState<any[]>([]);
+  const [currentSort, setCurrentSort] = useState("Date Created");
+  const sortedTodos = sortTodos(todos, currentSort);
 
   // Redirect logic: If not loading and no user, send to auth page
   useEffect(() => {
@@ -98,10 +102,11 @@ export default function HomePage() {
           <TodoInput userId={user?.uid} />
 
           {/* FIXED: This wrapper ensures the button stays on the far right */}
-          <div className="flex justify-end">
+          <div className="flex justify-between items-center gap-4">
+            <SortDropdown onSortChange={setCurrentSort} />
             <DeleteAllButton todos={todos} userId={user?.uid} />
           </div>
-          <TodoList todos={todos} />
+          <TodoList todos={sortedTodos} />
         </div>
 
         {/* MODALS SECTION */}
