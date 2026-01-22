@@ -7,6 +7,7 @@ import SignoutModal from "@/components/modals/SignoutModal";
 import ProgressBar from "@/components/features/ProgressBar";
 // Ensure this import matches your new file name (todo.ts)
 import { subscribeToTodos } from "@/db/todo";
+import { useTodoCelebration } from "@/hooks/useCelebration";
 
 export default function HomePage() {
   const { user, loading } = useAuth();
@@ -39,6 +40,9 @@ export default function HomePage() {
       if (unsubscribe) unsubscribe();
     };
   }, [user]);
+
+  //confetti listener
+  useTodoCelebration(todos);
 
   if (loading) {
     return (

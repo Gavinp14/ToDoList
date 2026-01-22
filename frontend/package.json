@@ -12,6 +12,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "canvas-confetti": "^1.9.4",
     "firebase": "^12.8.0",
     "lucide-react": "^0.562.0",
     "next": "16.1.4",
