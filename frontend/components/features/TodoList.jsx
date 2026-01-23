@@ -38,6 +38,7 @@ export default function TodoList({ todos = [] }) {
                 title={todo.title}
                 isChecked={todo.isChecked}
                 priority={todo.priority}
+                category={todo.category}
                 onToggle={() => handleToggle(todo.id, todo.isChecked)}
                 onEdit={() => {
                   setEditingTodoId(todo.id);

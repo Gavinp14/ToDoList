@@ -11,6 +11,7 @@ export default function TodoItem({
   onEdit,
   onDelete,
   priority,
+  category,
 }) {
   // 1. Fixed: Added missing closing brace and default return
   //unit test needed here
@@ -45,8 +46,8 @@ export default function TodoItem({
           >
             {title}
           </h3>
+          <h3 className="text-sm font-medium text-gray-500">{category}</h3>
         </div>
-
         <div className="flex items-center gap-2 flex-shrink-0">
           {/* 2. Fixed: Added px, py, rounded, and border to make it a proper badge */}
           <span
