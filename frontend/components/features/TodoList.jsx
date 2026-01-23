@@ -25,7 +25,7 @@ export default function TodoList({ todos = [] }) {
           max-h-[420px] is roughly 5-6 items depending on your TodoItem padding.
           overflow-y-auto ensures the scrollbar stays hidden until content overflows.
       */}
-      <div className="max-h-[500px] overflow-x-hidden hover:overflow pr-2 custom-scrollbar">
+      <div className="h-[500px] overflow-x-hidden hover:overflow pr-2 custom-scrollbar">
         <div className="space-y-4">
           {todos.length === 0 ? (
             <p className="text-center text-gray-500 py-10">
