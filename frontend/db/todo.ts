@@ -63,13 +63,18 @@ export const fetchUserTodos = async (uid: string) => {
 /**
  * ADD NEW TODO
  */
-export const addTodo = async (userId: string, title: string) => {
+export const addTodo = async (
+  userId: string,
+  title: string,
+  priority: string,
+  category: string,
+) => {
   if (!title.trim()) return;
   return await addDoc(collection(db, "todos"), {
     title,
     isChecked: false,
     category: "General",
-    priority: "Medium",
+    priority: priority,
     userId,
     createdAt: new Date(),
   });
@@ -100,3 +105,5 @@ export const updateTodoTitle = async (todoId: string, newTitle: string) => {
 export const removeTodo = async (todoId: string) => {
   return await deleteDoc(doc(db, "todos", todoId));
 };
+
+//todo category functions

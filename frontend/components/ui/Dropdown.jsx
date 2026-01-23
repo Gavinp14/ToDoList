@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import Button from "./Button";
 
-export default function Dropdown({ label, options }) {
+export default function Dropdown({ dropdownName, label, options, direction }) {
   const [isOpen, setIsOpen] = useState(false);
   // Initialize with the default label prop
   const [selectedLabel, setSelectedLabel] = useState(label);
@@ -26,7 +26,7 @@ export default function Dropdown({ label, options }) {
         className="flex items-center gap-2 cursor-pointer select-none text-gray-700 hover:text-gray-900 transition-colors group"
       >
         {/* The dynamic label */}
-        <span className="font-medium text-sm">Sort: {selectedLabel}</span>
+        <span className="font-medium text-sm">{`${dropdownName || ""} ${selectedLabel}`}</span>
 
         {/* The arrow icon */}
         <span
@@ -40,7 +40,9 @@ export default function Dropdown({ label, options }) {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute left-0 mt-2 w-48 origin-top-right bg-white rounded-xl shadow-2xl border border-gray-100 z-[100] animate-in fade-in zoom-in duration-150">
+        <div
+          className={`absolute ${direction}-0 mt-2 w-48 origin-top-right bg-white rounded-xl shadow-2xl border border-gray-100 z-[100] animate-in fade-in zoom-in duration-150`}
+        >
           <div className="py-2">
             {options.map((opt, index) => (
               <button

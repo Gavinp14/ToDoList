@@ -19,7 +19,13 @@ export const sortTodos = (todos, sortBy) => {
 
     // 4. Priority (High to Low) - assuming 1 is High, 3 is Low
     case "Priority":
-      return list.sort((a, b) => (a.priority || 0) - (b.priority || 0));
+      const priorityOrder = { High: 1, Medium: 2, Low: 3 };
+
+      return list.sort((a, b) => {
+        const scoreA = priorityOrder[a.priority] || 4; // Default to 4 if no priority
+        const scoreB = priorityOrder[b.priority] || 4;
+        return scoreA - scoreB; // 1 (High) comes before 2 (Medium), etc.
+      });
 
     // 5. Show Completed Only (Completed at top)
     case "Completed":
