@@ -106,4 +106,22 @@ export const removeTodo = async (todoId: string) => {
   return await deleteDoc(doc(db, "todos", todoId));
 };
 
-//todo category functions
+export const deleteAllTodos = async (userId: string, todos: any[]) => {
+  if (!userId || !todos.length) return;
+
+  try {
+    // 1. Find all docs in 'todos' collection belonging to this user
+    const q = query(collection(db, "todos"), where("userId", "==", userId));
+    const querySnapshot = await getDocs(q);
+
+    // 2. Delete each document refactor this in todos db file
+    const deletePromises = querySnapshot.docs.map((todoDoc) =>
+      deleteDoc(doc(db, "todos", todoDoc.id)),
+    );
+
+    await Promise.all(deletePromises);
+    console.log("All tasks deleted successfully");
+  } catch (error) {
+    console.error("Error deleting tasks:", error);
+  }
+};

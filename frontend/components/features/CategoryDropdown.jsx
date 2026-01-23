@@ -10,7 +10,11 @@ function CategoryDropdown({ onCategoryChange, selectedCategory }) {
     { label: "Shopping", onClick: () => onCategoryChange("Shopping") },
     { label: "Chores", onClick: () => onCategoryChange("Chores") },
     { label: "Education", onClick: () => onCategoryChange("Education") },
-    { label: "Others", onClick: () => onCategoryChange("Others") },
+    { label: "Other", onClick: () => onCategoryChange("Other") },
+    {
+      label: "Add New Category...",
+      onClick: () => onCategoryChange("Add New Category"),
+    }, // Placeholder for adding new category
   ];
 
   return (

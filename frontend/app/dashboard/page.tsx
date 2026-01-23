@@ -104,7 +104,9 @@ export default function HomePage() {
           {/* FIXED: This wrapper ensures the button stays on the far right */}
           <div className="flex justify-between items-center gap-4">
             <SortDropdown onSortChange={setCurrentSort} />
-            <DeleteAllButton todos={todos} userId={user?.uid} />
+            <div className="flex-end flex items-center gap-5">
+              <DeleteAllButton todos={todos} userId={user?.uid} />
+            </div>
           </div>
           <TodoList todos={sortedTodos} />
         </div>
