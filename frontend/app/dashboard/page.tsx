@@ -73,7 +73,7 @@ export default function HomePage() {
       <div className="max-w-4xl mx-auto">
         {/* HEADER SECTION */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">My To-Do List</h1>
+          <h1 className="text-3xl font-bold text-gray-900"></h1>
 
           {/* Right-aligned group */}
           <div className="ml-auto flex items-center gap-6">
