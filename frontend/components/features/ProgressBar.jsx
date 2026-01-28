@@ -26,7 +26,7 @@ export default function ProgressBar({ todos = [] }) {
   };
 
   return (
-    <div className="my-10 w-full">
+    <div className="my-5 w-full">
       {/* Label above the bar */}
       <div className="flex justify-between mb-2">
         <span className="text-sm font-bold text-gray-700">

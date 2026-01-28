@@ -1,51 +1,66 @@
-'use client';
-import { useState, useRef, useEffect } from 'react';
-import Button from './Button';
+"use client";
+import { useState, useRef, useEffect } from "react";
+import Button from "./Button";
 
-export default function Dropdown({ label, options }) {
+export default function Dropdown({ dropdownName, label, options, direction }) {
   const [isOpen, setIsOpen] = useState(false);
+  // Initialize with the default label prop
+  const [selectedLabel, setSelectedLabel] = useState(label);
   const dropdownRef = useRef(null);
 
-  // Close dropdown if user clicks anywhere else on the screen
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <div className="relative inline-block text-left" ref={dropdownRef}>
       {/* Trigger Button */}
-      <Button 
-        color="blue" 
+      <div
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2"
+        className="flex items-center gap-2 cursor-pointer select-none text-gray-700 hover:text-gray-900 transition-colors group"
       >
-        {label}
-        <span className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
+        {/* The dynamic label */}
+        <span className="font-medium text-sm">{`${dropdownName || ""} ${selectedLabel}`}</span>
+
+        {/* The arrow icon */}
+        <span
+          className={`text-[10px] transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          } group-hover:translate-y-0.5`}
+        >
           ▼
         </span>
-      </Button>
+      </div>
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 origin-top-right bg-white rounded-xl shadow-2xl border border-gray-100 z-[100] animate-in fade-in zoom-in duration-150">
+        <div
+          className={`absolute ${direction}-0 mt-2 w-48 origin-top-right bg-white rounded-xl shadow-2xl border border-gray-100 z-[100] animate-in fade-in zoom-in duration-150`}
+        >
           <div className="py-2">
-            {options.map((option, index) => (
+            {options.map((opt, index) => (
               <button
                 key={index}
                 onClick={() => {
-                  option.onClick();
+                  opt.onClick();
+                  // Update the state to the newly selected label
+                  setSelectedLabel(opt.label);
                   setIsOpen(false);
                 }}
-                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors flex items-center gap-2"
+                className={`w-full text-left px-4 py-2 text-sm transition-colors flex items-center gap-2 ${
+                  selectedLabel === opt.label
+                    ? "bg-blue-50 text-blue-600 font-semibold"
+                    : "text-gray-700 hover:bg-gray-50"
+                }`}
               >
-                {option.icon && <span>{option.icon}</span>}
-                {option.label}
+                {opt.icon && <span>{opt.icon}</span>}
+                {opt.label}
               </button>
             ))}
           </div>
