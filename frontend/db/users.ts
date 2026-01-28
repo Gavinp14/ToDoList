@@ -24,3 +24,15 @@ export const subscribeToUserProfile = (
     callback(doc.data());
   });
 };
+
+export const getUserCategories = async (uid: string) => {
+  const userRef = doc(db, "users", uid);
+  const userSnap = await getDoc(userRef);
+  if (userSnap.exists()) {
+    const userData = userSnap.data();
+    return userData.categories || [];
+  } else {
+    console.log("No such user document!");
+    return [];
+  }
+};

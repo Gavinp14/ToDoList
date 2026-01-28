@@ -106,6 +106,8 @@ export const removeTodo = async (todoId: string) => {
   return await deleteDoc(doc(db, "todos", todoId));
 };
 
+
+//delete all todos for a user
 export const deleteAllTodos = async (userId: string, todos: any[]) => {
   if (!userId || !todos.length) return;
 

@@ -42,6 +42,16 @@ export default function AuthPage() {
           birthdate: birthdate,
           email: email,
           createdAt: new Date(),
+          categories: [
+            "General",
+            "Work",
+            "Personal",
+            "Shopping",
+            "Chores",
+            "Education",
+            "Health",
+            "Other",
+          ],
         });
 
         // 3. Store User Settings
@@ -52,9 +62,7 @@ export default function AuthPage() {
           notifications: true, // Default notifications setting
         });
 
-        await setDoc(doc(db, "userCategories", user.uid), {
-          userCategories: [], // custom categories
-        });
+        // 3. Store User Settings
       }
 
       // Only redirect if all database operations are successful

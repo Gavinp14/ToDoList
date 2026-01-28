@@ -1,0 +1,31 @@
+name: Code Quality Check
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Pull the code from GitHub
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Setup the environment (Using Node 20+ for 2026 standards)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm" # Speeds up builds by caching node_modules
+
+      # 3. Install only necessary dependencies
+      - name: Install Dependencies
+        run: npm ci
+
+      # 4. Run the Linter
+      - name: Run Linting
+        run: npm run lint

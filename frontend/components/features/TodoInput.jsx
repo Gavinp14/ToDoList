@@ -34,6 +34,7 @@ export default function TodoInput({ userId }) {
         className="mt-4"
         onCategoryChange={setCategory}
         selectedCategory={category}
+        currentUser={userId}
       />
       <PriorityDropdown
         className="mt-4"
